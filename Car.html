@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Application de Gestion des Écoles</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            padding: 20px;
+        }
+
+        .container {
+            margin-top: 20px;
+        }
+ .form-group {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Application de Gestion des Écoles</h2>
+
+        <!-- Formulaire d'inscription des élèves -->
+        <h3>Formulaire d'Inscription</h3>
+        <form id="studentForm">
+ <div class="form-group">
+ <label for="studentNumber">Numéro d'élève</label>
+                <input type="text" class="form-control" id="studentNumber" placeholder="Numéro d'élève" required>
+            </div>
+            <div class="form-group">
+                <label for="studentName">Nom de l'élève</label>
+                <input type="text" class="form-control" id="studentName" placeholder="Nom de l'élève" required>
+            </div>
+            <div class="form-group">
+                <label for="studentClass">Classe</label>
+                <input type="text" class="form-control" id="studentClass" placeholder="Classe" required>
+            </div>
+            <div class="form-group">
+                <label for="studentDate">Date d'inscription</label>
+                <input type="date" class="form-control" id="studentDate" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Inscrire l'élève</button>
+        </form>
+
+        <!-- Tableau des élèves inscrits -->
+        <h3>Historique des Inscriptions</h3>
+        <input type="text" id="searchStudentNumber" class="form-control mb-3" placeholder="Rechercher par numéro d'élève">
+        <table class="table table-bordered" id="studentList">
+  <thead>
+                <tr>
+	<th>Numéro</th>
+                    <th>Nom</th>
+                    <th>Classe</th>
+                    <th>Date d'inscription</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Les élèves inscrits seront ajoutés ici -->
+            </tbody>
+        </table>
+
+        <hr>
+
+        <!-- Formulaire de paiement des frais de scolarité -->
+        <h3>Formulaire de Paiement des Écolages</h3>
+        <form id="paymentForm">
+            <div class="form-group">
+                <label for="paymentNumber">Numéro d'élève</label>
+                <input type="text" class="form-control" id="paymentNumber" placeholder="Numéro d'élève" required>
+</div>
+            <div class="form-group">
+                <label for="paymentName">Nom de l'élève</label>
+                <input type="text" class="form-control" id="paymentName" placeholder="Nom de l'élève" disabled>
+            </div>
+            <div class="form-group">
+                <label for="paymentAmount">Montant</label>
+                <input type="number" class="form-control" id="paymentAmount" placeholder="Montant" required>
+            </div>
+            <div class="form-group">
+                <label for="paymentDate">Date de paiement</label>
+				<input type="date" class="form-control" id="paymentDate" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Enregistrer le paiement</button>
+        </form>
+
+        <!-- Tableau des paiements -->
+        <h3>Historique des Paiements</h3>
+        <input type="text" id="searchPaymentNumber" class="form-control mb-3" placeholder="Rechercher par numéro d'élève">
+        <table class="table table-bordered" id="paymentList">
+            <thead>
+                <tr>
+                    <th>Numéro</th>
+                    <th>Nom</th>
+                    <th>Montant</th>
+                    <th>Date de paiement</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+ <tbody>
+                <!-- Les paiements seront ajoutés ici -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bootstrap JS & JQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        // Liste des élèves inscrits
+        let students = [];
+        // Liste des paiements
+		let payments = [];
+
+        // Fonction d'inscription des élèves
+        document.getElementById('studentForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const studentNumber = document.getElementById('studentNumber').value;
+            const studentName = document.getElementById('studentName').value;
+            const studentClass = document.getElementById('studentClass').value;
+            const studentDate = document.getElementById('studentDate').value;
+
+            const student = {
+                number: studentNumber,
+                name: studentName,
+                studentClass: studentClass,
+                date: studentDate
+            };
+
+            students.push(student);
+   // Mettre à jour l'affichage des élèves inscrits
+            displayStudents();
+
+            // Réinitialiser le formulaire
+            document.getElementById('studentForm').reset();
+        });
+
+        // Afficher les élèves inscrits
+        function displayStudents() {
+            const studentList = document.getElementById('studentList').getElementsByTagName('tbody')[0];
+            studentList.innerHTML = '';
+
+            students.forEach(student => {
+                const row = studentList.insertRow();
+				row.insertCell(0).textContent = student.number;
+                row.insertCell(1).textContent = student.name;
+                row.insertCell(2).textContent = student.studentClass;
+                row.insertCell(3).textContent = student.date;
+            });
+        }
+
+        // Fonction de paiement des frais de scolarité
+        document.getElementById('paymentForm').addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const paymentNumber = document.getElementById('paymentNumber').value;
+            const paymentName = document.getElementById('paymentName').value;
+            const paymentAmount = document.getElementById('paymentAmount').value;
+            const paymentDate = document.getElementById('paymentDate').value;
+
+            const payment = {
+                number: paymentNumber,
+                name: paymentName,
+amount: paymentAmount,
+                date: paymentDate
+            };
+
+            payments.push(payment);
+
+            // Mettre à jour l'affichage des paiements
+            displayPayments();
+
+            // Réinitialiser le formulaire
+            document.getElementById('paymentForm').reset();
+        });
+
+        // Afficher les paiements
+        function displayPayments() {
+		const paymentList = document.getElementById('paymentList').getElementsByTagName('tbody')[0];
+            paymentList.innerHTML = '';
+
+            payments.forEach(payment => {
+                const row = paymentList.insertRow();
+                row.insertCell(0).textContent = payment.number;
+                row.insertCell(1).textContent = payment.name;
+                row.insertCell(2).textContent = payment.amount;
+                row.insertCell(3).textContent = payment.date;
+                row.insertCell(4).innerHTML = "<button class="btn-sm"  onclick="printReceipt('${payment.number}')">Imprimer</button>;"
+            });
+        }
+
+        // Rechercher les paiements par numéro d'élève
+        document.getElementById('searchPaymentNumber').addEventListener('input', function () {
+            const searchValue = this.value;
+            const filteredPayments = payments.filter(payment => 
+			payment.number.includes(searchValue));
+            displayFilteredPayments(filteredPayments);
+        });
+
+        // Afficher les paiements filtrés
+        function displayFilteredPayment
+		 const paymentList = document.getElementById('paymentList').getElementsByTagName('tbody')[0];
+            paymentList.innerHTML = '';
+			filteredPayments.forEach(payment => 
+                const row = paymentList.insertRow();
+                row.insertCell(0).textContent = payment.number;
+                row.insertCell(1).textContent = payment.name;
+                row.insertCell(2).textContent = payment.amount;
+                row.insertCell(3).textContent = payment.date;
+                row.insertCell(4).innerHTML = <button class="btn btn-info btn-sm" onclick="printReceipt('{payment.number}')">Imprimer</button>;
+            });
+        }
+
+        // Imprimer le reçu
+        function printReceipt(number) {
+            const payment = payments.find(p => p.number === number);
+            if (payment) {
+ const receipt = `
+                    <h3>Reçu de Paiement</h3>
+                    <p><strong>Numéro d'élève :</strong> payment.number</p>
+                    <p><strong>Nom :</strong>{payment.name}</p>
+                    <p><strong>Montant payé :</strong> payment.amount €</p>
+                    <p><strong>Date du paiement :</strong>{payment.date}</p>
+                    <p><strong>Merci pour votre paiement !</strong></p>
+                `;
+                
+                const printWindow = window.open('', '', 'width=600,height=600');
+                printWindow.document.write(receipt);
+                printWindow.document.close();
+                printWindow.print();
+            }
+        }
+ // Fonction qui met à jour le nom de l'élève lors de la saisie du numéro
+        document.getElementById('paymentNumber').addEventListener('input', function () {
+            const number = this.value;
+            const student = students.find(s => s.number === number);
+            if (student) {
+                document.getElementById('paymentName').value = student.name;
+            } else {
+	document.getElementById('paymentName').value = '';
+            }
+        });
+
+        // Rechercher un élève inscrit par son numéro
+        document.getElementById('searchStudentNumber').addEventListener('input', function () {
+            const searchValue = this.value;
+            const filteredStudents = students.filter(student => student.number.includes(searchValue));
+            displayFilteredStudents(filteredStudents);
+        });
+
+        // Afficher les élèves filtrés
+        function displayFilteredStudents(filteredStudents) {
+            const studentList = document.getElementById('studentList').getElementsByTagName('tbody')[0];
+            studentList.innerHTML = '';
+
+            filteredStudents.forEach(student => {
+   const row = studentList.insertRow();
+                row.insertCell(0).textContent = student.number;
+                row.insertCell(1).textContent = student.name;
+                row.insertCell(2).textContent = student.studentClass;
+                row.insertCell(3).textContent = student.date;
+            });
+        }
+    </script>
+</body>
+
+</html>
